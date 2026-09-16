@@ -1,0 +1,34 @@
+# ---- Gradle 构建产物（模组 jar 在 build/libs/，不提交）----
+.gradle/
+build/
+
+# ---- ForgeGradle 开发运行目录：含生成的存档、日志，不提交 ----
+run/
+runs/
+logs/
+crash-reports/
+
+# ---- 工作区工具元数据（含本机路径等个人信息）----
+.workbuddy-ai/
+
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.eclipse/
+.settings/
+.classpath
+.project
+bin/
+out/
+
+# ---- 杂项 ----
+*.log
+*.bak
+*.tmp
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 注意：gradle/wrapper/gradle-wrapper.jar 必须提交，它是 Gradle Wrapper 的一部分

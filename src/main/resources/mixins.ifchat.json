@@ -1,0 +1,10 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.baiqian.ifchat.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.ifchat.refmap.json",
+  "mixins": [
+    "ServerPlayerMixin"
+  ]
+}
