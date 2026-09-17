@@ -49,6 +49,7 @@ public class IfChat {
     private static final AtomicBoolean LOGGED_FIRST_CHAT_STRIP = new AtomicBoolean(false);
 
     public IfChat(FMLJavaModLoadingContext context) {
+        IfChatSetup.register(context.getModEventBus());
         context.registerConfig(ModConfig.Type.COMMON, IfChatConfig.SPEC);
         LOGGER.info("[ifchat] 已加载：execute if chat 分支 + 聊天未签名下发。");
     }
