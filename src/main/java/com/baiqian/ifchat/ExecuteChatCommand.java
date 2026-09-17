@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -23,12 +22,13 @@ import org.slf4j.Logger;
 /**
  * 往 {@code execute if} / {@code execute unless} 上挂一个 {@code chat} 条件分支。
  *
- * <p>语法：
+ * <p>语法（文本参数见 {@link ChatTextArgument}：中文可以不加引号，
+ * 但文本本身含空格时必须加）：
  * <pre>
- *   execute if     chat &lt;targets&gt; exact    "文本"
- *   execute if     chat &lt;targets&gt; contains "文本"
- *   execute unless chat &lt;targets&gt; exact    "文本"
- *   execute unless chat &lt;targets&gt; contains "文本"
+ *   execute if     chat &lt;targets&gt; exact    开门
+ *   execute if     chat &lt;targets&gt; contains 开门
+ *   execute if     chat &lt;targets&gt; contains "开 门"
+ *   execute unless chat &lt;targets&gt; exact    开门
  * </pre>
  *
  * <p>实现方式与 vanilla 的 {@code ExecuteCommand.addConditionArguments} 完全一致：
@@ -87,7 +87,7 @@ public final class ExecuteChatCommand {
                                                                boolean isIf,
                                                                boolean exact) {
         return Commands.literal(literal).then(
-                Commands.argument(ARG_TEXT, StringArgumentType.string())
+                Commands.argument(ARG_TEXT, ChatTextArgument.chatText())
                         .fork(forkTarget, ctx -> forkResult(ctx, isIf, exact))
                         .executes(ctx -> {
                             if (test(ctx, exact) == isIf) {
@@ -112,7 +112,7 @@ public final class ExecuteChatCommand {
 
     /** 只要 targets 里有任意一名玩家的最近发言命中，就算条件成立。 */
     private static boolean test(CommandContext<CommandSourceStack> ctx, boolean exact) throws CommandSyntaxException {
-        String text = StringArgumentType.getString(ctx, ARG_TEXT);
+        String text = ChatTextArgument.getText(ctx, ARG_TEXT);
         // 用 getOptionalPlayers：没有玩家时返回空集合，而不是抛 NO_PLAYERS_FOUND，
         // 与 vanilla 的 execute if entity 行为一致（条件不成立而不是命令报错）。
         Collection<ServerPlayer> players = EntityArgument.getOptionalPlayers(ctx, ARG_TARGETS);

@@ -10,20 +10,29 @@ Minecraft 1.20.1 / Forge 47.x 模组，两件事：
 给原版 `execute` 挂了个 chat 条件：
 
 ```
-execute if     chat <targets> exact    "文本"
-execute if     chat <targets> contains "文本"
-execute unless chat <targets> exact    "文本"
-execute unless chat <targets> contains "文本"
+execute if     chat <targets> exact    开门
+execute if     chat <targets> contains 开门
+execute unless chat <targets> exact    开门
+execute unless chat <targets> contains 开门
 ```
 
 `exact` 完全相等（分大小写），`contains` 包含就行。`<targets>` 里任意一个玩家命中即成立。
 
+文本**可以直接写中文，不用加引号**。原版 `StringArgumentType` 读非引号内容时只认
+`[0-9A-Za-z_.+-]`，中文会被它读成空串、直接报解析错误，所以这里自己实现了一个文本参数：
+以引号开头就走原版逻辑，否则一直读到空白为止，中日文、emoji 都行。
+
+文本里**含空格**时仍然要加引号：
+
 ```
 # 有人说"开门"就开机关
-execute if chat @a contains "开门" run setblock 10 64 10 stone
+execute if chat @a contains 开门 run setblock 10 64 10 stone
 
 # 谁说了"你好"就给谁发提示
-execute as @a if chat @a exact "你好" run tellraw @s "嗨"
+execute as @a if chat @a exact 你好 run tellraw @s "嗨"
+
+# 文本带空格，加引号
+execute if chat @a contains "开 门" run say 机关开了
 ```
 
 不接 `run` 时和原版条件一样回显 `Test passed` / `Test failed`。
